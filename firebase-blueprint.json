@@ -1,0 +1,240 @@
+{
+  "entities": {
+    "Project": {
+      "title": "Project",
+      "description": "Portfolio creative project or video reel item",
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "category": {
+          "type": "string",
+          "enum": ["video", "branding", "flyer", "poster", "social", "banner"]
+        },
+        "media_type": {
+          "type": "string",
+          "enum": ["video", "image"]
+        },
+        "media_url": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "client_or_brand": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "aspect_ratio": {
+          "type": "string",
+          "enum": ["16:9", "9:16", "1:1", "4:3", "3:4"]
+        },
+        "likes_count": {
+          "type": "number"
+        },
+        "views_count": {
+          "type": "number"
+        },
+        "featured": {
+          "type": "boolean"
+        },
+        "sort_order": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "required": ["slug", "title", "category", "media_type", "media_url"]
+    },
+    "Skill": {
+      "title": "Skill",
+      "description": "Software stack or technical qualification with proficiency level",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "category": {
+          "type": "string",
+          "enum": ["design", "video", "office", "it"]
+        },
+        "proficiency": {
+          "type": "number"
+        },
+        "focus": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "icon": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "details": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "sort_order": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "category", "proficiency"]
+    },
+    "ProjectComment": {
+      "title": "ProjectComment",
+      "description": "Visitor or client review left on a portfolio project",
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "authorName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "comment": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "rating": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "required": ["authorName", "comment", "rating"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Employer or client job proposal / contact inquiry",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "service": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "budget": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "timeline": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 3000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "contacted", "hired", "archived"]
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "email", "service", "message"]
+    },
+    "Testimonial": {
+      "title": "Testimonial",
+      "description": "Client recommendation and endorsement quote",
+      "type": "object",
+      "properties": {
+        "author": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "company": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "quote": {
+          "type": "string",
+          "maxLength": 1500
+        },
+        "rating": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "required": ["author", "quote", "rating"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Authorized portfolio administrator identifier",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin"]
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Published portfolio projects and video reels"
+    },
+    "/projects/{projectId}/comments/{commentId}": {
+      "schema": "ProjectComment",
+      "description": "Reviews and comments for a given portfolio project"
+    },
+    "/skills/{skillId}": {
+      "schema": "Skill",
+      "description": "Technical and software stack proficiencies"
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Client inquiries and hiring proposals sent via the website"
+    },
+    "/testimonials/{testimonialId}": {
+      "schema": "Testimonial",
+      "description": "Client endorsements and review quotes"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Admin directory for authorized portfolio management"
+    }
+  }
+}

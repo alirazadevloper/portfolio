@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'aliraza1122alikhan@gmail.com' ||
+        request.auth.token.email == 'munazza.00077@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Projects: Public can view, like, and comment; only admins can create, update, or delete
+    match /projects/{projectId} {
+      allow read: if true;
+      allow create, delete: if isAdmin();
+      allow update: if true;
+
+      // Project comments subcollection
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if true;
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // Skills: Public can read; only admin can add, edit, or delete
+    match /skills/{skillId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Inquiries: Anyone can submit a contact proposal; strictly ONLY admin can read, update status, or delete
+    match /inquiries/{inquiryId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Testimonials: Public read, public submit recommendation, admin manage
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // Admins directory: strictly RBAC protected
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}
